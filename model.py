@@ -18,6 +18,7 @@ class ForestFire(Model):
     """
     Simple Forest Fire model.
     """
+    import random
     def __init__(self, height=100, width=100, density=0.65):
         """
         Create a new forest fire model.

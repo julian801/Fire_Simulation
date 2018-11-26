@@ -1,0 +1,39 @@
+CRITICAL:root:Factorial calculation ended
+CRITICAL:root:Factorial calculation ended
+CRITICAL:root:Factorial calculation ended
+CRITICAL:root:Factorial calculation ended
+CRITICAL:root:Factorial calculation ended
+CRITICAL:root:Factorial calculation ended
+CRITICAL:root:Factorial calculation ended
+INFO:example1:message for logger 1
+WARNING:example2:message for logger 2
+INFO:example1:another message for logger 1
+CRITICAL:root:Factorial calculation ended
+CRITICAL:root:Factorial calculation ended
+INFO:example1:message for logger 1
+WARNING:example2:message for logger 2
+INFO:example1:another message for logger 1
+INFO:example1:message for logger 1
+WARNING:example2:message for logger 2
+INFO:example1:another message for logger 1
+INFO:example1:message for logger 1
+WARNING:example2:message for logger 2
+INFO:example1:another message for logger 1
+INFO:example1:message for logger 1
+WARNING:example2:message for logger 2
+INFO:example1:another message for logger 1
+INFO:example1:message for logger 1
+WARNING:example2:message for logger 2
+INFO:example1:another message for logger 1
+CRITICAL:root:Factorial calculation ended
+INFO:example1:message for logger 1
+WARNING:example2:message for logger 2
+INFO:example1:another message for logger 1
+CRITICAL:root:Factorial calculation ended
+INFO:example1:message for logger 1
+WARNING:example2:message for logger 2
+INFO:example1:another message for logger 1
+CRITICAL:root:Factorial calculation ended
+INFO:example1:message for logger 1
+WARNING:example2:message for logger 2
+INFO:example1:another message for logger 1
