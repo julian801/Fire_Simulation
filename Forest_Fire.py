@@ -21,15 +21,16 @@ from mesa.batchrunner import BatchRunner
 class TreeCell(Agent):
     '''
     A tree cell.
-    
+
     Attributes:
         x, y: Grid coordinates
         condition: Can be "Fine", "On Fire", or "Burned Out"
-        unique_id: (x,y) tuple. 
-    
+        unique_id: (x,y) tuple.
+
     unique_id isn't strictly necessary here, but it's good practice to give one to each
     agent anyway.
     '''
+
     def __init__(self, model, pos):
         '''
         Create a new tree.
@@ -40,7 +41,7 @@ class TreeCell(Agent):
         self.pos = pos
         self.unique_id = pos
         self.condition = "Fine"
-        
+
     def step(self):
         '''
         If the tree is on fire, spread it to fine trees nearby.
@@ -52,7 +53,7 @@ class TreeCell(Agent):
                     neighbor.condition = "On Fire"
             self.condition = "Burned Out"
 
-##End of class
+# End of class
 
 
 class ForestFire(Model):
@@ -60,10 +61,11 @@ class ForestFire(Model):
     Simple Forest Fire model.
     '''
     import random
+
     def __init__(self, height, width, density):
         '''
         Create a new forest fire model.
-        
+
         Args:
             height, width: The size of the grid to model
             density: What fraction of grid cells have a tree in them.
@@ -74,14 +76,14 @@ class ForestFire(Model):
         self.height = height
         self.width = width
         self.density = density
-        
+
         # Set up model objects
         self.schedule = RandomActivation(self)
         self.grid = Grid(height, width, torus=False)
         self.dc = DataCollector({"Fine": lambda m: self.count_type(m, "Fine"),
-                                "On Fire": lambda m: self.count_type(m, "On Fire"),
-                                "Burned Out": lambda m: self.count_type(m, "Burned Out")})
-        
+                                 "On Fire": lambda m: self.count_type(m, "On Fire"),
+                                 "Burned Out": lambda m: self.count_type(m, "Burned Out")})
+
         # Place a tree in each cell with Prob = density
         for x in range(self.width):
             for y in range(self.height):
@@ -89,11 +91,11 @@ class ForestFire(Model):
                     # Create a tree
                     new_tree = TreeCell(self, (x, y))
                     # Set all trees in the first column on fire.
-                    ##Edit below to change the location of the fire <--------------------------
+                    # Edit below to change the location of the fire <--------------------------
                     if x == 0:
                         new_tree.condition = "On Fire"
                     self.grid[y][x] = new_tree
-                    ##Edits below ----------------------------------
+                    # Edits below ----------------------------------
                     if new_tree.condition == "On Fire":
                         self.matrix[x][y] = 1
                     if new_tree.condition == "Burned Out":
@@ -102,7 +104,7 @@ class ForestFire(Model):
                         self.matrix[x][y] = 0
                     self.schedule.add(new_tree)
         self.running = True
-        #print(self.matrix)
+        # print(self.matrix)
 
     def step(self):
         '''
@@ -113,7 +115,7 @@ class ForestFire(Model):
         # Halt if no more fire
         if self.count_type(self, "On Fire") == 0:
             self.running = False
-    
+
     @staticmethod
     def count_type(model, tree_condition):
         '''
@@ -121,15 +123,15 @@ class ForestFire(Model):
         '''
         count = 0
         for tree in model.schedule.agents:
-            model.MatrixHistory.append(model.matrix)
             if tree.condition == tree_condition:
                 count += 1
             if tree.condition == "Burned Out":
                 model.matrix[tree.pos[0]][tree.pos[1]] = 1
             if tree.condition == "On Fire":
                 model.matrix[tree.pos[0]][tree.pos[1]] = 1
+            model.MatrixHistory.append(model.matrix.copy())
         return count
-##End of class    
+# End of class
 
 #fire = ForestFire(4+1, 20+1, 0.5)
-#fire.run_model()
+# fire.run_model()
