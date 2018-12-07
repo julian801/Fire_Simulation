@@ -7,6 +7,7 @@
  My personal use: Apapted this program to change some of the parameters and interact with 
  a folium map.
 """
+# Code review: Kristian 2018/12/02
 
 
 import numpy as np
@@ -32,6 +33,7 @@ class TreeCell(Agent):
     unique_id isn't strictly necessary here, but it's good practice to give one to each
     agent anyway.
     '''
+    # KR: reference your source for the model you adapted
 
     def __init__(self, model, pos):
         '''
@@ -48,6 +50,7 @@ class TreeCell(Agent):
         '''
         If the tree is on fire, spread it to fine trees nearby.
         '''
+        # KR: this is an example of a great docstring
         if self.condition == "On Fire":
             neighbors = self.model.grid.get_neighbors(self.pos, moore=False)
             for neighbor in neighbors:
@@ -55,14 +58,17 @@ class TreeCell(Agent):
                     neighbor.condition = "On Fire"
             self.condition = "Burned Out"
 
-
+# End of class
+# KR: this comment is redundant and should be removed
 
 class ForestFire(Model):
     '''
     Simple Forest Fire model.
     '''
     import random
-    def __init__(self, height, width, density, border, middle, margin):
+    # KR: import is already on top
+
+    def __init__(self, height, width, density):
         '''
         Create a new forest fire model.
 
@@ -91,14 +97,11 @@ class ForestFire(Model):
                     # Create a tree
                     new_tree = TreeCell(self, (x, y))
                     # Set all trees in the first column on fire.
-                    if x == 0 and border:
+                    # Edit below to change the location of the fire <--------------------------
+                    if x == 0:
                         new_tree.condition = "On Fire"
-                    # Edits below ----------------------------------
-                    #if (middle == True) and (x in range(int(height/2) - margin, int(height/2) + margin) ) and (y in range(int(height/2) - margin, int(height/2) + margin)):
-                    #    new_tree.condition = "On Fire"
-                    #    self.matrix[x][y] = 1
-                    #end of edits
                     self.grid[y][x] = new_tree
+                    # Edits below ----------------------------------
                     if new_tree.condition == "On Fire":
                         self.matrix[x][y] = 1
                     if new_tree.condition == "Burned Out":
@@ -106,17 +109,8 @@ class ForestFire(Model):
                     if new_tree.condition == "Fine":
                         self.matrix[x][y] = 0
                     self.schedule.add(new_tree)
-        #self.running = True
-        # print(self.matrix)
-        if (middle == True): 
-            for x in range(int(height/2) - margin, int(height/2) + margin):
-                for y in range(int(height/2) - margin, int(height/2) + margin):
-                    new_tree = TreeCell(self, (x, y))
-                    new_tree.condition = "On Fire"
-                    self.matrix[x][y] = 1
-                    self.grid[y][x] = new_tree
-                    self.schedule.add(new_tree)
         self.running = True
+        # print(self.matrix)
 
     def step(self):
         '''
@@ -143,4 +137,9 @@ class ForestFire(Model):
                 model.matrix[tree.pos[0]][tree.pos[1]] = 1
             model.MatrixHistory.append(model.matrix.copy())
         return count
+# End of class
 
+#fire = ForestFire(4+1, 20+1, 0.5)
+# fire.run_model()
+
+# KR: remove last three comments

@@ -2,12 +2,8 @@
 map using the Forest_Fire package/model'''
 import json
 import pandas as pd
-from matplotlib import pyplot as plt
-import numpy as np
-import imageio
 import geopy
 from geopy.distance import VincentyDistance
-import geopandas
 import folium.plugins
 import folium
 
@@ -123,20 +119,7 @@ def json_file(num_squares, length, latitude, longitude):
     file.write(write_string)
     file.close()
 
-def make_animation(matrix_store, num_squares, max_frames=1000):
-    '''This function makes an animation out of the json file and the burn function'''
-    world = geopandas.read_file('area.geojson')
-    images = []
-    for i in range(0, len(matrix_store), max_frames):
-        world['square_color'] = square_burn(matrix_store[i], num_squares)
-        world.plot(column='square_color', cmap='OrRd', scheme='quantiles', figsize=(10, 3))
-        #plt.axis((-180+i, -90+i, 0, 90))
-        filename = 'tiles/slice{:0d}.png'.format(i)
-        plt.savefig(filename)
-        images.append(imageio.imread(filename))
-    imageio.mimsave('output.gif', images, fps=10)
-
-def display_map(matrix, num_squares, latitude, longitude,scale):
+def display_map(matrix, num_squares, latitude, longitude):
     ''' This function colors the map given the inputs, and colors it according
     to the proportion of the model burned.'''
     data = square_burn(matrix, num_squares) #Color the map
@@ -148,7 +131,7 @@ def display_map(matrix, num_squares, latitude, longitude,scale):
         name='chloropleth',
         data=color_data,
         columns=['name', 'value'],
-        threshold_scale=scale,
+        threshold_scale=[0, .2, .4, .6, .8, 1],
         key_on='properties.name',
         fill_color='YlOrRd',
         fill_opacity=0.7,
@@ -157,9 +140,3 @@ def display_map(matrix, num_squares, latitude, longitude,scale):
     )
     folium.LayerControl().add_to(show_map)
     return show_map
-
-def color_scale(array_matrix, num_squares, margin):
-    matrix = array_matrix[len(array_matrix) -1] - array_matrix[0] 
-    value = max(square_burn(matrix,num_squares)) + 1/(num_squares * (num_squares + 1) * 10 ) 
-    + (margin**2)/(num_squares**2 * ((num_squares + 1) * 10)**2)
-    return np.linspace(0,value, 6)
